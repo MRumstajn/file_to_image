@@ -1,9 +1,6 @@
 from PIL import Image
 import math
-
-WHITE_RGB = (255, 255, 255)
-BLACK_RGBB = (0, 0, 0)
-EOF_RGB = (255, 0, 0)
+from common import *
 
 def convert_to_img(file: str, output_image: str):
     # read file data
@@ -35,7 +32,7 @@ def map_bits_to_pixels(bits: list[int]) -> list[tuple]:
     # Array of tuples where each tuple is a pixel (RGB value).
     pixels = []
     for bit in bits:
-        pixels.append(BLACK_RGBB if bit == 1 else WHITE_RGB)
+        pixels.append(BLACK_RGB if bit == 1 else WHITE_RGB)
 
     return pixels
 
@@ -45,13 +42,17 @@ def convert_bytes_to_bits_array(raw_data: bytes) -> list[int]:
     for byt in raw_data:
         bit_str = "{0:b}".format(byt)
        
+        buff = []
         for str_bit in bit_str:
-            output_bits.append(1 if str_bit == "1" else 0)
+            buff.append(1 if str_bit == "1" else 0)
 
         required_padding = 8 - len(bit_str)
         for _ in range(required_padding):
-            output_bits.append(0)
+            buff.insert(0, 0)
 
+        for bit in buff:
+            output_bits.append(bit)
+        
     return output_bits
 
 
